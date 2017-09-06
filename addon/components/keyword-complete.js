@@ -206,7 +206,7 @@ export default Ember.Component.extend({
     });
   },
 
-  debouceThis: observer('filterQuery', 'currentSourceKey', function () {
+  debounceThis: observer('filterQuery', 'currentSourceKey', function () {
     const filterQuery = this.get('filterQuery');
     const timeout = this.get('loadDebounceInterval');
     const currentSourceKey = this.get('currentSourceKey')
