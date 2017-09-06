@@ -52,36 +52,36 @@
             &lt;/div>
             &lt;/div>
             &lt;div class="complete-tooltip-body">
-            &lt;ul>
-            \{{#each complete.suggestions as |suggestion idx|}}
-            \{{complete.item tagName='li' suggestion=suggestion active=(eq idx complete.selectionIdx)}}
-            \{{/each}}
-            &lt;/ul>
+                &lt;ul>
+                  \{{#each complete.suggestions as |suggestion idx|}}
+                    \{{complete.item tagName='li' suggestion=suggestion active=(eq idx complete.selectionIdx)}}
+                  \{{/each}}
+                &lt;/ul>
             &lt;/div>
-            \{{~/complete.tooltip}}
-            &lt;/div>
-            \{{textarea class="demo-textarea emoji" id="complete-textarea" rows="8" value=text}}
-            \{{/keyword-complete}}
-        {{/code-block}}
-    {{/tabs.tab}}
+        \{{~/complete.tooltip}}
+      &lt;/div>
+      \{{textarea class="demo-textarea emoji" id="complete-textarea" rows="8" value=text}}
+  \{{/keyword-complete}}
+{{/code-block}}
+  {{/tabs.tab}}
 
-    {{#tabs.tab name='javascript'}}
-        {{#code-block language='javascript'}}
-            export default Ember.Controller.extend({
-            text: 'Lorem ipsum dolor sit amet, … sequi similique totam vel.',
-            ds: {
-            ':': {
-            component: 'emoji-item',
-            extractDataString(item) {
-            return `:${item.val}:`;
-            },
-            loadSuggestions(query) {
-            return RSVP.resolve(ENV.APP.EMOJIS.filter(item => `:${item.val}:`.indexOf(query) !== -1));
-            }
-            }
-            }
-            });{{/code-block}}
-    {{/tabs.tab}}
+  {{#tabs.tab name='javascript'}}
+    {{#code-block language='javascript'}}
+export default Ember.Controller.extend({
+  text: 'Lorem ipsum dolor sit amet, … sequi similique totam vel.',
+  ds: {
+    ':': {
+      component: 'emoji-item',
+      extractDataString(item) {
+        return `:${item.val}:`;
+      },
+      loadSuggestions(query) {
+        return RSVP.resolve(ENV.APP.EMOJIS.filter(item => `:${item.val}:`.indexOf(query) !== -1));
+      }
+    }
+  }
+});{{/code-block}}
+  {{/tabs.tab}}
 {{/code-block-tabs}}
 
 <hr>

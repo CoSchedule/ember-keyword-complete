@@ -373,20 +373,19 @@ export default Ember.Component.extend({
     this.set('caretPosition', caretPosition + 1);
   },
 
-  /**
-   * Function called on target 'keydown'. Used to handle "special" key presses.
-   * @param {jQuery.Event} ev
-   * @returns {boolean|undefined}
-   * @public
-   */
-  keyDownHandler(ev) {
-    if (!this.get('enabled')) {
+    /**
+     * Function called on target 'keydown'. Used to handle "special" key presses.
+     * @param {jQuery.Event} ev
+     * @returns {boolean|undefined}
+     * @public
+     */
+    keyDownHandler(ev) {
+        if (!this.get('enabled')) {
       return;
     }
 
     const input = this.get('input');
-    const sources = this.get('dataSources');
-    const keyCode = ev.which || ev.keyCode;
+           const sources = this.get('dataSources');const keyCode = ev.which || ev.keyCode;
 
     let visible = this.get('tooltipVisible');
     if (ev.ctrlKey || ev.altKey || ev.metaKey || ev.shiftKey || keyCode === KEYS.SHIFT) {
@@ -428,46 +427,48 @@ export default Ember.Component.extend({
       }
     }
 
-    let selectionIdx = this.get('selectionIdx');
-    switch (keyCode) {
-      case KEYS.ENTER:
-      case KEYS.TAB: {
-        if (visible && selectionIdx > -1) {
-          this.applySelection(this.get('suggestions')[selectionIdx]);
-        } else {
-          return true;
-        }
-        ev.stopImmediatePropagation();
-        return false;
-      }
-      case KEYS.ARROW_UP: {
-        if (!visible) {
-          return;
-        }
-        if (selectionIdx - 1 > -1) {
-          this.decrementProperty('selectionIdx');
-        } else {
-          this.set('selectionIdx', this.get('suggestions.length') - 1);
-        }
-        return false;
-      }
-      case KEYS.ARROW_DOWN: {
-        if (!visible) {
-          return;
-        }
-        if (selectionIdx + 1 < this.get('suggestions.length')) {
-          this.incrementProperty('selectionIdx');
-        } else {
-          // next round
-          this.set('selectionIdx', 0);
-        }
-        return false;
-      }
-      case KEYS.BACKSPACE: {
-        const caretPosition = getCaretPosition(input) - 1;
-        const prevChar = input.value[caretPosition - 1];
-        this.set('caretPosition', caretPosition);
-        this.set('selectionIdx', 0);
+        if (visible && this.get('shouldShowTypingState')) {
+            this.set('showTypingState', true);
+            Ember.run.later(this, ()=> {
+                this.set('showTypingState', false);
+            }, this.get('typingStateTimeout'));
+        }let selectionIdx = this.get('selectionIdx');
+        switch (keyCode) {
+            case KEYS.ENTER:
+            case KEYS.TAB:{
+                if (visible && selectionIdx > -1) {
+                    this.applySelection(this.get('suggestions')[selectionIdx]);
+                } else {
+                    return true;
+                }
+                ev.stopImmediatePropagation();
+                return false;
+      }      case KEYS.ARROW_UP:{
+                if (!visible) {
+                    return;
+                }
+                if (selectionIdx - 1 > -1) {
+                    this.decrementProperty('selectionIdx');
+                } else {
+                    this.set('selectionIdx', this.get('suggestions.length') - 1);
+                }
+                return false;
+      }      case KEYS.ARROW_DOWN:{
+                if (!visible) {
+                    return;
+                }
+                if (selectionIdx + 1 < this.get('suggestions.length')) {
+                    this.incrementProperty('selectionIdx');
+                } else {
+                    // next round
+                    this.set('selectionIdx', 0);
+                }
+                return false;
+      }      case KEYS.BACKSPACE:{
+                const caretPosition = getCaretPosition(input) - 1;
+                   const prevChar = input.value[caretPosition - 1];
+                this.set('caretPosition', caretPosition);
+                this.set('selectionIdx', 0);
 
         if (REGEX_WHITESPACE.test(prevChar)) {
           this.set('caretStart', null);
